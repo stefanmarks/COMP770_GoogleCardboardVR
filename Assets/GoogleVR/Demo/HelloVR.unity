@@ -2199,9 +2199,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Recorder: {fileID: 0}
-  UseDB: 1
+  LevelType: 0
   MaxLevel: -6
-  MinLevel: -80
+  MinLevel: -30
   ScaleFactor: {x: 1, y: 0, z: 0}
   ShrinkTime: 1
 --- !u!4 &1406250146 stripped

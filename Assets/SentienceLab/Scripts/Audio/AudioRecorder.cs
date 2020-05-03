@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AudioRecorder : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class AudioRecorder : MonoBehaviour
     public string MicrophoneName = "";
 
 
-    void Start()
+    public void Start()
     {
         SelectMicrophone();
         
@@ -55,7 +56,7 @@ public class AudioRecorder : MonoBehaviour
     }
 
     
-    void Update()
+    public void Update()
     {
         // allocate audio data buffer if not already done
         if (m_data == null)
@@ -69,27 +70,32 @@ public class AudioRecorder : MonoBehaviour
         {
             m_clip.GetData(m_data, 0);
 
-            CurrentVolumeRMS = 0;
-
+            CurrentLevelRMS  = 0;
+            CurrentLevelPeak = 0;
             int   idx     = m_prevDataPos;
             int   samples = 0;
             while (idx != m_dataPos)
             {
-                CurrentVolumeRMS += m_data[idx] * m_data[idx];
+                float sample = m_data[idx];
+                CurrentLevelRMS += sample * sample;
+                CurrentLevelPeak = Mathf.Max(CurrentLevelPeak, Mathf.Abs(sample));
                 idx = (idx + 1) % m_data.Length;
                 samples++;
             }
-            CurrentVolumeRMS /= samples;
-            CurrentVolumeRMS = Mathf.Sqrt(CurrentVolumeRMS);
-            CurrentVolumeDB = 20 * Mathf.Log10(CurrentVolumeRMS);
+            CurrentLevelRMS /= samples;
+            CurrentLevelRMS = Mathf.Sqrt(CurrentLevelRMS);
+            CurrentLevelDB = 20 * Mathf.Log10(CurrentLevelRMS);
 
             m_prevDataPos = m_dataPos;
         }
     }
 
 
-    public float CurrentVolumeRMS { get; private set; }
-    public float CurrentVolumeDB { get; private set; }
+    public float CurrentLevelRMS  { get; private set; }
+
+    public float CurrentLevelDB   { get; private set; }
+
+    public float CurrentLevelPeak { get; private set; }
 
 
     protected AudioClip m_clip;

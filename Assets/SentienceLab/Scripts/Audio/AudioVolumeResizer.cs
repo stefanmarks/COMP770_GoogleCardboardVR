@@ -2,12 +2,26 @@
 
 public class AudioVolumeResizer : MonoBehaviour
 {
+    public enum ELevelType { DB, RMS, Peak };
+
+    [Tooltip("Which recorder to use (empty: find automatically)")]
     public AudioRecorder Recorder;
-    public bool          UseDB       = true;
-    public float         MaxLevel    = -6;
-    public float         MinLevel    = -80;
-    public Vector3       ScaleFactor = Vector3.one;
-    public float         ShrinkTime  = 1;
+
+    [Tooltip("Use DB or RMS as audio level")]
+    public ELevelType LevelType = ELevelType.DB;
+
+    [Tooltip("Minimum audio level for scaling the object")]
+    public float MaxLevel = -6;
+
+    [Tooltip("Maximum audio level for scaling the object")]
+    public float MinLevel = -80;
+
+    [Tooltip("Scale factors for the object")]
+    public Vector3 ScaleFactor = Vector3.one;
+
+    [Tooltip("Time in s for the scale to revert to normal")]
+    public float ShrinkTime  = 1;
+
 
     public void Start()
     {
@@ -20,14 +34,21 @@ public class AudioVolumeResizer : MonoBehaviour
             this.enabled = false;
         }
         m_originalScale = transform.localScale;
-        m_size = 1;
+        m_size = 0;
     }
 
     public void Update()
     {
         if (Recorder == null) return;
 
-        float vol = UseDB ? Recorder.CurrentVolumeDB : Recorder.CurrentVolumeRMS;
+        float vol = 0;
+        switch (LevelType)
+        {
+            case ELevelType.DB:   vol = Recorder.CurrentLevelDB; break;
+            case ELevelType.RMS:  vol = Recorder.CurrentLevelRMS; break;
+            case ELevelType.Peak: vol = Recorder.CurrentLevelPeak; break;
+        }
+
         vol  = Mathf.Clamp(vol, MinLevel, MaxLevel);
         vol -= MinLevel; 
         vol /= (MaxLevel - MinLevel); // vol is now between 0...1
