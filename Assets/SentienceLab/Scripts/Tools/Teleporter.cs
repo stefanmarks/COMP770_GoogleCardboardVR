@@ -152,21 +152,26 @@ namespace SentienceLab
 		public void TeleportMainCameraPositionAndOrientation(Transform target)
 		{
 			// How do we get from the current camera direction to the target direction?
-			// camera direction relative to source (no Y)\
-			Vector3 relCamPos = this.transform.InverseTransformPoint(Camera.main.transform.position);
-			relCamPos.y = 0;
-			Vector3 relCamFwd = this.transform.InverseTransformDirection(Camera.main.transform.forward);
+			
+			// Determine camera position on floor (no Y) relative to source
+			Vector3 camPos    = Camera.main.transform.position;
+			Vector3 relCamPosFloor = this.transform.InverseTransformPoint(camPos);
+			relCamPosFloor.y = 0;
+
+			// determine camera direction relative to source
+			Vector3 camFwd    = Camera.main.transform.forward;
+			Vector3 relCamFwd = this.transform.InverseTransformDirection(camFwd);
 			relCamFwd.y = 0; relCamFwd.Normalize();
-			// target direction relative to source
-			Vector3 relTargetFwd = this.transform.InverseTransformDirection(target.forward);
-			// calculate difference rotation
-			Quaternion targetRot = Quaternion.FromToRotation(relCamFwd, relTargetFwd);
-			// make it a world quaternion
-			targetRot = this.transform.rotation * targetRot;
+			float camAngle = Mathf.Atan2(relCamFwd.x, relCamFwd.z) * Mathf.Rad2Deg;
+
+			// calculate difference rotation so camera faces forwards after teleport
+			Quaternion targetRot = target.rotation;
+			targetRot = Quaternion.AngleAxis(-camAngle, target.up) * targetRot;
+
 			// execute
 			Activate(
-				this.transform.TransformPoint(relCamPos), this.transform.rotation, 
-				target.TransformPoint(relCamPos), targetRot);
+				this.transform.InverseTransformPoint(relCamPosFloor), this.transform.rotation, 
+				target.TransformPoint(relCamPosFloor), targetRot);
 		}
 
 
