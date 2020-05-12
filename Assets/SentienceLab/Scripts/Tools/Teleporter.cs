@@ -149,6 +149,12 @@ namespace SentienceLab
 		}
 
 
+		public void TeleportPositionAndOrientation(Transform target)
+		{
+			TeleportPositionAndOrientation(this.transform, target);
+		}
+
+
 		public void TeleportMainCameraPositionAndOrientation(Transform target)
 		{
 			// How do we get from the current camera direction to the target direction?
