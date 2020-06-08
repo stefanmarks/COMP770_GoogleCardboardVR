@@ -7,10 +7,14 @@ public class AudioRecorder : MonoBehaviour
     [Tooltip("Name of the microphone to use (can be regular expression. empty: use default)")]
     public string MicrophoneName = "";
 
+    [Tooltip("Threshold at which to fire noise/silence detected events")]
     [Range(0,1)]
     public float noiseThreshold = 0.2f;
 
+    [Tooltip("Event fired when the detected volume level is below the noise threshold")]
     public UnityEvent silenceDetected;
+
+    [Tooltip("Event fired when the noise threshold is exceeded")]
     public UnityEvent noiseDetected;
 
 
