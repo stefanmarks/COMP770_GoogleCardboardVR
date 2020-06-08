@@ -25,7 +25,9 @@ namespace SentienceLab
 		{
 			raycaster     = null;
 			raycastResult = new RaycastResult();
-			teleporter    = GameObject.FindObjectOfType<Teleporter>();
+
+			FindCameraTeleporter();
+			groundMarker.gameObject.SetActive(false);
 		}
 
 
@@ -33,7 +35,7 @@ namespace SentienceLab
 		{
 			if (raycaster != null)
 			{
-				groundMarker.gameObject.SetActive(teleporter.IsReady());
+				groundMarker.gameObject.SetActive((teleporter != null) && teleporter.IsReady());
 
 				// If this object is still "hit" by the raycast source, update ground marker position and orientation
 				raycastResult.Clear();
@@ -53,10 +55,6 @@ namespace SentienceLab
 						groundMarker.rotation = Quaternion.Euler(0, yaw, 0);
 					}
 				}
-			}
-			else
-			{
-				groundMarker.gameObject.SetActive(false);
 			}
 		}
 
@@ -80,8 +78,24 @@ namespace SentienceLab
 		public void OnPointerExit(PointerEventData eventData)
 		{
 			raycaster = null;
+			groundMarker.gameObject.SetActive(false);
 		}
 
+
+		protected void FindCameraTeleporter()
+		{
+			teleporter = null;
+			Teleporter[] teleporters = FindObjectsOfType<Teleporter>();
+			foreach (Teleporter t in teleporters)
+			{
+				Camera c = t.GetComponentInChildren<Camera>();
+				if (c != null && c.gameObject.activeInHierarchy)
+				{
+					teleporter = t;
+					break;
+				}
+			}
+		}
 
 		private Transform     raycaster;
 		private RaycastResult raycastResult;
