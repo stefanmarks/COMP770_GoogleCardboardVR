@@ -1,11 +1,17 @@
 ﻿using System.Text.RegularExpressions;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.Events;
 
 public class AudioRecorder : MonoBehaviour
 {
     [Tooltip("Name of the microphone to use (can be regular expression. empty: use default)")]
     public string MicrophoneName = "";
+
+    [Range(0,1)]
+    public float noiseThreshold = 0.2f;
+
+    public UnityEvent silenceDetected;
+    public UnityEvent noiseDetected;
 
 
     public void Start()
@@ -27,6 +33,7 @@ public class AudioRecorder : MonoBehaviour
         m_data = null;
         m_dataPos = 0;
         m_prevDataPos = 0;
+        m_noiseDetected = false;
     }
 
 
@@ -86,6 +93,23 @@ public class AudioRecorder : MonoBehaviour
             CurrentLevelRMS = Mathf.Sqrt(CurrentLevelRMS);
             CurrentLevelDB = 20 * Mathf.Log10(CurrentLevelRMS);
 
+            if (CurrentLevelRMS > noiseThreshold)
+            {
+                if (!m_noiseDetected)
+                {
+                    noiseDetected.Invoke();
+                    m_noiseDetected = true;
+                }
+            }
+			else 
+			{
+                if (m_noiseDetected)
+                {
+                    silenceDetected.Invoke();
+                    m_noiseDetected = false;
+                }
+			}
+
             m_prevDataPos = m_dataPos;
         }
     }
@@ -101,4 +125,5 @@ public class AudioRecorder : MonoBehaviour
     protected AudioClip m_clip;
     protected float[]   m_data;
     protected int       m_dataPos, m_prevDataPos;
+    protected bool      m_noiseDetected;
 }
