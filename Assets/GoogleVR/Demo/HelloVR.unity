@@ -2105,12 +2105,6 @@ PrefabInstance:
       propertyPath: OutputResolution
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114000011015867216, guid: ce7abbbeb276a1547bd8ce1069fdabb7,
-        type: 3}
-      propertyPath: InstantPreviewApk
-      value: 
-      objectReference: {fileID: 102900000, guid: f6b89aa293ff80043a9d7465510984c4,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce7abbbeb276a1547bd8ce1069fdabb7, type: 3}
 --- !u!4 &1286569895 stripped

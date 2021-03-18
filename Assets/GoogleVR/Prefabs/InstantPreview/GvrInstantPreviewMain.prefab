@@ -92,7 +92,7 @@ MonoBehaviour:
   MultisampleCount: 0
   BitRate: 3
   InstallApkOnRun: 1
-  InstantPreviewApk: {fileID: 1000013061525784}
+  InstantPreviewApk: {fileID: 102900000, guid: 60466e95990d16e458e7d11e4bdf630f, type: 3}
   overrideDeviceUserPrefs: 0
   editorUserPrefs:
     handedness: 0
