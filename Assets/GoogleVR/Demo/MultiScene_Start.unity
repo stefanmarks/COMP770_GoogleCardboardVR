@@ -409,10 +409,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScenesToLoad:
   - MultiScene_Main
-  SceneMode: 0
   LoadOnStart: 1
-  ScenesToUnload: []
-  FadeTime: 0.5
+  FadeTime: 0
   FadeColour: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &1643314801
 MonoBehaviour:

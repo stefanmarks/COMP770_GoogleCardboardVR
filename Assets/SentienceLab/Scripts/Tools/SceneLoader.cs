@@ -14,18 +14,15 @@ namespace SentienceLab
 {
 	public class SceneLoader : MonoBehaviour
 	{
-		public List<string>   ScenesToLoad   = null;
-		public LoadSceneMode  SceneMode      = LoadSceneMode.Single;
-		public bool           LoadOnStart    = false;
-		public List<string>   ScenesToUnload = null;
-		public float          FadeTime       = 0.5f;
-		public Color          FadeColour     = Color.black;
+		public List<string>   ScenesToLoad = null;
+		public bool           LoadOnStart  = false;
+		public float          FadeTime     = 0.5f;
+		public Color          FadeColour   = Color.black;
 
 
 		public void Start()
 		{
 			CheckSceneList(ScenesToLoad);
-			CheckSceneList(ScenesToUnload);
 
 			if (LoadOnStart)
 			{
@@ -68,8 +65,7 @@ namespace SentienceLab
 
 		public void StartLoading()
 		{
-			if ( (ScenesToLoad   == null || ScenesToLoad.Count   == 0) &&
-			     (ScenesToUnload == null || ScenesToUnload.Count == 0) ) return;
+			if ( (ScenesToLoad == null || ScenesToLoad.Count == 0) ) return;
 
 			StartCoroutine(LoadSceneWorker());
 		}
@@ -77,6 +73,10 @@ namespace SentienceLab
 
 		public IEnumerator LoadSceneWorker()
 		{
+			string thisScene = SceneManager.GetActiveScene().name;
+			Debug.LogFormat(
+				"Scene {0} attaching ScreenFade effect to cameras",
+				thisScene);
 			// create fade effect
 			List<ScreenFade> fadeEffects = ScreenFade.AttachToAllCameras();
 			foreach (ScreenFade fade in fadeEffects)
@@ -84,6 +84,9 @@ namespace SentienceLab
 				fade.FadeColour = FadeColour;
 			}
 
+			Debug.LogFormat(
+				"Scene {0} fading to black",
+				thisScene);
 			float fadeFactor = 0;
 			while (fadeFactor < 1)
 			{
@@ -95,43 +98,14 @@ namespace SentienceLab
 				yield return null;
 			}
 
-			string lastLoadedScene = "";
 			foreach (var asset in ScenesToLoad)
 			{
-				SceneManager.LoadScene(asset, SceneMode);
-				yield return null;
-				lastLoadedScene = asset;
-			}
-			// cameras might have changed
-			fadeEffects = ScreenFade.AttachToAllCameras();
-			foreach (ScreenFade fade in fadeEffects)
-			{
-				fade.FadeColour = FadeColour;
-				fade.FadeFactor = 1;
-			}
-			foreach (var asset in ScenesToUnload)
-			{
-				SceneManager.UnloadSceneAsync(asset);
-				yield return null;
-			}
-			if (lastLoadedScene != "")
-			{
-				SceneManager.SetActiveScene(SceneManager.GetSceneByName(lastLoadedScene));
-			}
-			
-			while (fadeFactor > 0)
-			{
-				fadeFactor -= Time.deltaTime / FadeTime;
-				foreach (ScreenFade fade in fadeEffects)
-				{
-					fade.FadeFactor = fadeFactor;
-				}
-				yield return null;
-			}
+				Debug.LogFormat(
+					"Scene {0} loading scene {1}",
+					thisScene, asset);
 
-			foreach (ScreenFade fade in fadeEffects)
-			{
-				GameObject.Destroy(fade);
+				var loadingOperation = SceneManager.LoadSceneAsync(asset);
+				while (!loadingOperation.isDone) yield return null;
 			}
 		}
 	}
