@@ -104,7 +104,11 @@ public class GvrEditorEmulator : MonoBehaviour
         if (CanChangeYawPitch())
         {
             GvrCursorHelper.HeadEmulationActive = true;
+#if ENABLE_INPUT_SYSTEM
+            mouseX += UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue() * 0.5f;
+#else
             mouseX += Input.GetAxis(AXIS_MOUSE_X) * 5;
+#endif
             if (mouseX <= -180)
             {
                 mouseX += 360;
@@ -114,14 +118,22 @@ public class GvrEditorEmulator : MonoBehaviour
                 mouseX -= 360;
             }
 
+#if ENABLE_INPUT_SYSTEM
+            mouseY += UnityEngine.InputSystem.Mouse.current.delta.y.ReadValue() * -0.24f;
+#else
             mouseY -= Input.GetAxis(AXIS_MOUSE_Y) * 2.4f;
+#endif
             mouseY = Mathf.Clamp(mouseY, -85, 85);
         }
         else if (CanChangeRoll())
         {
             GvrCursorHelper.HeadEmulationActive = true;
             rolled = true;
+#if ENABLE_INPUT_SYSTEM
+            mouseZ += UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue() * 0.5f;
+#else
             mouseZ += Input.GetAxis(AXIS_MOUSE_X) * 5;
+#endif
             mouseZ = Mathf.Clamp(mouseZ, -85, 85);
         }
         else
@@ -199,7 +211,12 @@ public class GvrEditorEmulator : MonoBehaviour
             return false;
         }
 
+#if ENABLE_INPUT_SYSTEM
+        return UnityEngine.InputSystem.Keyboard.current.leftAltKey.isPressed || 
+               UnityEngine.InputSystem.Keyboard.current.rightAltKey.isPressed;
+#else
         return Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+#endif
     }
 
     private bool CanChangeRoll()
@@ -210,7 +227,12 @@ public class GvrEditorEmulator : MonoBehaviour
             return false;
         }
 
+#if ENABLE_INPUT_SYSTEM
+        return UnityEngine.InputSystem.Keyboard.current.leftCtrlKey.isPressed ||
+               UnityEngine.InputSystem.Keyboard.current.rightCtrlKey.isPressed;
+#else
         return Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+#endif
     }
 
     private void UpdateHeadPositionAndRotation()

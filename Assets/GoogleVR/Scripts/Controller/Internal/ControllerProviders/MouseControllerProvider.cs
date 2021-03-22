@@ -47,6 +47,42 @@ namespace Gvr.Internal
         private static readonly Vector3 INVERT_Y = new Vector3(1, -1, 1);
         private static readonly ControllerState dummyState = new ControllerState();
 
+#if ENABLE_INPUT_SYSTEM
+
+        public static bool IsMouseAvailable
+        {
+            get { return (UnityEngine.InputSystem.Mouse.current != null) && IsActivateButtonPressed; }
+        }
+
+        public static bool IsActivateButtonPressed
+        {
+            get { return UnityEngine.InputSystem.Keyboard.current.leftShiftKey.isPressed || 
+                         UnityEngine.InputSystem.Keyboard.current.rightShiftKey.isPressed; }
+        }
+
+        public static bool IsClickButtonPressed
+        {
+            get { return UnityEngine.InputSystem.Mouse.current.leftButton.isPressed; }
+        }
+
+        public static bool IsAppButtonPressed
+        {
+            get { return UnityEngine.InputSystem.Mouse.current.rightButton.isPressed; }
+        }
+
+        public static bool IsHomeButtonPressed
+        {
+            get { return UnityEngine.InputSystem.Mouse.current.middleButton.isPressed; }
+        }
+
+        public static bool IsTouching
+        {
+            get { return UnityEngine.InputSystem.Keyboard.current.leftCtrlKey.isPressed ||
+                         UnityEngine.InputSystem.Keyboard.current.rightCtrlKey.isPressed; }
+        }
+
+#else
+
         public static bool IsMouseAvailable
         {
             get { return Input.mousePresent && IsActivateButtonPressed; }
@@ -76,6 +112,8 @@ namespace Gvr.Internal
         {
             get { return Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl); }
         }
+        
+#endif
 
         public bool SupportsBatteryStatus
         {
@@ -138,10 +176,15 @@ namespace Gvr.Internal
 
             UpdateButtonStates();
 
+#if ENABLE_INPUT_SYSTEM
+            mouseDelta.Set(
+                UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue(),
+                UnityEngine.InputSystem.Mouse.current.delta.y.ReadValue());
+#else
             mouseDelta.Set(
                 Input.GetAxis(AXIS_MOUSE_X),
                 Input.GetAxis(AXIS_MOUSE_Y));
-
+#endif
             if (0 != (state.buttonsState & GvrControllerButton.TouchPadTouch))
             {
                 UpdateTouchPos();
@@ -154,7 +197,14 @@ namespace Gvr.Internal
 
         private void UpdateTouchPos()
         {
+#if ENABLE_INPUT_SYSTEM
+            Vector3 currentMousePosition = new Vector3(
+                UnityEngine.InputSystem.Mouse.current.position.x.ReadValue(),
+                UnityEngine.InputSystem.Mouse.current.position.y.ReadValue(),
+                0);
+#else
             Vector3 currentMousePosition = Input.mousePosition;
+#endif
             Vector2 touchDelta = mouseDelta * TOUCH_SENSITIVITY;
             touchDelta.y *= -1.0f;
 

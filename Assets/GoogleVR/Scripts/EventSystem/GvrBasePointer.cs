@@ -840,6 +840,21 @@ public abstract class GvrBasePointer : MonoBehaviour, IGvrControllerInputDeviceR
             GvrControllerButton buttonDown = 0;
             GvrControllerButton buttonUp = 0;
 
+#if ENABLE_INPUT_SYSTEM
+            // Cardboard button events come through as mouse button 0 and are
+            // mapped to TouchPadButton.
+            if (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame || 
+                UnityEngine.InputSystem.Touchscreen.current.press.wasPressedThisFrame)
+            {
+                buttonDown |= GvrControllerButton.TouchPadButton;
+            }
+
+            if (UnityEngine.InputSystem.Mouse.current.leftButton.wasReleasedThisFrame ||
+                UnityEngine.InputSystem.Touchscreen.current.press.wasReleasedThisFrame)
+            {
+                buttonUp |= GvrControllerButton.TouchPadButton;
+            }
+#else
             // Cardboard button events come through as mouse button 0 and are
             // mapped to TouchPadButton.
             if (Input.GetMouseButtonDown(0))
@@ -851,6 +866,7 @@ public abstract class GvrBasePointer : MonoBehaviour, IGvrControllerInputDeviceR
             {
                 buttonUp |= GvrControllerButton.TouchPadButton;
             }
+#endif
 
             if (ControllerInputDevice != null)
             {
