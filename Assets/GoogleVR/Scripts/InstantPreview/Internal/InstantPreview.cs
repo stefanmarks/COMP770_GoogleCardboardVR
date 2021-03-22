@@ -1073,6 +1073,8 @@ namespace Gvr.Internal
 				process.OutputDataReceived += (o, ef) => outputBuilder.AppendLine(ef.Data);
 				process.ErrorDataReceived += (o, ef) => errorBuilder.AppendLine(ef.Data);
 
+				// Debug.Log("Starting process " + process.ToString());
+
 				process.Start();
 				process.BeginOutputReadLine();
 				process.BeginErrorReadLine();
@@ -1082,6 +1084,8 @@ namespace Gvr.Internal
 				// Trims the output strings to make comparison easier.
 				output = outputBuilder.ToString().Trim();
 				errors = errorBuilder.ToString().Trim();
+
+				// Debug.Log("Finished Process\nOutput: " + output + "\nErrors: " + errors);
 			}
 		}
 
