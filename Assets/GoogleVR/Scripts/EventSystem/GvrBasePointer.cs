@@ -843,14 +843,18 @@ public abstract class GvrBasePointer : MonoBehaviour, IGvrControllerInputDeviceR
 #if ENABLE_INPUT_SYSTEM
             // Cardboard button events come through as mouse button 0 and are
             // mapped to TouchPadButton.
-            if (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame || 
-                UnityEngine.InputSystem.Touchscreen.current.press.wasPressedThisFrame)
+            if ( ( (UnityEngine.InputSystem.Mouse.current != null) &&
+                   (UnityEngine.InputSystem.Mouse.current.leftButton.wasPressedThisFrame) ) || 
+                 ( (UnityEngine.InputSystem.Touchscreen.current != null) &&
+                   (UnityEngine.InputSystem.Touchscreen.current.press.wasPressedThisFrame) ) )
             {
                 buttonDown |= GvrControllerButton.TouchPadButton;
             }
 
-            if (UnityEngine.InputSystem.Mouse.current.leftButton.wasReleasedThisFrame ||
-                UnityEngine.InputSystem.Touchscreen.current.press.wasReleasedThisFrame)
+            if ( ( (UnityEngine.InputSystem.Mouse.current != null) &&
+                   (UnityEngine.InputSystem.Mouse.current.leftButton.wasReleasedThisFrame) ) ||
+                 ( (UnityEngine.InputSystem.Touchscreen.current != null) &&
+                   (UnityEngine.InputSystem.Touchscreen.current.press.wasReleasedThisFrame) ) )
             {
                 buttonUp |= GvrControllerButton.TouchPadButton;
             }
