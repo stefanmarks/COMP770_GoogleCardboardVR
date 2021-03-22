@@ -571,7 +571,7 @@ namespace Gvr.Internal
 							return;
 						}
 
-						Debug.Log("Instant Preview Version: " + pluginIPVersionName);
+						Debug.Log("Installing Instant Preview Version: " + pluginIPVersionName);
 
 						// Gets version of Unity's local .apk version (to install, if needed).
 						RunCommand(InstantPreviewHelper.aaptPath,
