@@ -105,7 +105,7 @@ public class GvrEditorEmulator : MonoBehaviour
         {
             GvrCursorHelper.HeadEmulationActive = true;
 #if ENABLE_INPUT_SYSTEM
-            mouseX += UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue() * 0.5f;
+            mouseX += UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue() * 5 / 20.0f;
 #else
             mouseX += Input.GetAxis(AXIS_MOUSE_X) * 5;
 #endif
@@ -119,7 +119,7 @@ public class GvrEditorEmulator : MonoBehaviour
             }
 
 #if ENABLE_INPUT_SYSTEM
-            mouseY += UnityEngine.InputSystem.Mouse.current.delta.y.ReadValue() * -0.24f;
+            mouseY += UnityEngine.InputSystem.Mouse.current.delta.y.ReadValue() * -2.4f / 20.0f;
 #else
             mouseY -= Input.GetAxis(AXIS_MOUSE_Y) * 2.4f;
 #endif
