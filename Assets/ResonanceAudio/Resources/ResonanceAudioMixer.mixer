@@ -13,12 +13,12 @@ AudioMixerController:
   - {fileID: 24500006}
   m_StartSnapshot: {fileID: 24500006}
   m_SuspendThreshold: -80
-  m_EnableSuspend: 0
+  m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters: []
   m_AudioMixerGroupViews:
   - guids:
-    - 0e57f74e9ab848d45b5fef53446c02c0
+    - c799ec8bc7f394c3faaa686b0c2f3f40
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -30,13 +30,13 @@ AudioMixerGroupController:
   m_PrefabAsset: {fileID: 0}
   m_Name: Master
   m_AudioMixer: {fileID: 24100000}
-  m_GroupID: 0e57f74e9ab848d45b5fef53446c02c0
+  m_GroupID: c799ec8bc7f394c3faaa686b0c2f3f40
   m_Children: []
-  m_Volume: ea6275186fddab94885f8d208bece516
-  m_Pitch: 5990d1b5ee40fe745828e8864495b2c2
+  m_Volume: 76dd6ada92654467da2044ca5eb97484
+  m_Pitch: f6e7ed6a2ec9849df837cb64b6ec8240
   m_Send: 00000000000000000000000000000000
   m_Effects:
-  - {fileID: 2243903457240415705}
+  - {fileID: 244255876635463380}
   - {fileID: 24400004}
   m_UserColorIndex: 0
   m_Mute: 0
@@ -49,9 +49,9 @@ AudioMixerEffectController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_EffectID: a665c53991bae2447a825d235f4622ef
+  m_EffectID: 9412d7f6841db4014b7ef1e25ba35dac
   m_EffectName: Attenuation
-  m_MixLevel: 6e98f0676992fa740a52cd29b8d8a920
+  m_MixLevel: 52aae3b4c529f4ce2986e1cd349a59a7
   m_Parameters: []
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
@@ -64,19 +64,19 @@ AudioMixerSnapshotController:
   m_PrefabAsset: {fileID: 0}
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
-  m_SnapshotID: 268792447d027b4438daea2964894107
+  m_SnapshotID: 7d121094476bd4ea2a9cc9ac388299f4
   m_FloatValues: {}
   m_TransitionOverrides: {}
---- !u!244 &2243903457240415705
+--- !u!244 &244255876635463380
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_EffectID: 502c6911f4cabf140a7b9cc9de157cbb
+  m_EffectID: 4e654e689a5c045319baafd4927386c5
   m_EffectName: Resonance Audio Renderer
-  m_MixLevel: 905844e323a3e0e4d93cce6ba6631c44
+  m_MixLevel: 5247e674388494bb8ad1d3cd2414ac41
   m_Parameters: []
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0

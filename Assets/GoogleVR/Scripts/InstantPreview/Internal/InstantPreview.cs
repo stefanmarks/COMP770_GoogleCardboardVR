@@ -312,27 +312,10 @@ namespace Gvr.Internal
 			internal UnityGvrRecenterEventData gvr_recenter_event_data;
 		}
 
-		/// <summary>GVR User Preferences.</summary>
-		/// <remarks>
-		/// Associated with options set by the user in the Daydream app.</remarks>
-		[System.Serializable]
-		public struct UnityGvrUserPreferences
-		{
-			/// <summary>The user's handedness preference.</summary>
-			public GvrSettings.UserPrefsHandedness handedness;
-		}
-
 		/// <summary>If `true`, overrides user preferences received from remote device with those
 		/// set in the InstantPreview editor inspector.</summary>
 		[Tooltip("Override user preferences from remote device with Editor preferences.")]
 		public bool overrideDeviceUserPrefs = false;
-
-		[HideInInspector]
-		/// <summary>The User Preferences to use if `overrideDeviceUserPrefs` is `true`.</summary>
-		public UnityGvrUserPreferences editorUserPrefs;
-
-		/// <summary>The User Preferences to use if `overrideDeviceUserPrefs` is `false`.</summary>
-		public UnityGvrUserPreferences deviceUserPrefs { get; private set; }
 
 #if UNITY_EDITOR
 		private readonly string[] RequiredAndroidFeatures = {
@@ -389,9 +372,6 @@ namespace Gvr.Internal
 
 		[DllImport(dllName)]
 		private static extern bool GetGvrEvent(ref UnityGvrEvent outputEvent);
-
-		[DllImport(dllName)]
-		private static extern bool GetGvrUserPreferences(ref UnityGvrUserPreferences outputUserPrefs);
 
 		[DllImport(dllName)]
 		private static extern IntPtr GetRenderEventFunc();
@@ -464,22 +444,6 @@ namespace Gvr.Internal
 		/// The `value` is valid only if `safetyCylinderExitRadius.isValid == true`.
 		/// </para></remarks>
 		public UnityFloatAtom safetyCylinderExitRadius { get; private set; }
-
-		/// <summary>Gets the user's handedness preference.</summary>
-		public GvrSettings.UserPrefsHandedness handedness
-		{
-			get
-			{
-				if (overrideDeviceUserPrefs)
-				{
-					return editorUserPrefs.handedness;
-				}
-				else
-				{
-					return deviceUserPrefs.handedness;
-				}
-			}
-		}
 
 		/// <summary>A queue for active GVR events.</summary>
 		/// <remarks>
@@ -796,15 +760,6 @@ namespace Gvr.Internal
 			}
 		}
 
-		void UpdateUserPreferences()
-		{
-			UnityGvrUserPreferences unityGvrUserPreferences = new UnityGvrUserPreferences();
-			if (GetGvrUserPreferences(ref unityGvrUserPreferences))
-			{
-				deviceUserPrefs = unityGvrUserPreferences;
-			}
-		}
-
 		void Update()
 		{
 			if (!EnsureCameras())
@@ -831,7 +786,6 @@ namespace Gvr.Internal
 
 			UpdateProperties();
 			UpdateEvents();
-			UpdateUserPreferences();
 		}
 
 		void OnPostRender()

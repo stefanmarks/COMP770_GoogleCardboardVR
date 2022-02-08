@@ -16,8 +16,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using Gvr.Internal;
 using UnityEngine;
 
@@ -95,15 +93,10 @@ public class GvrEditorEmulator : MonoBehaviour
             return;
         }
 
-        if (GvrControllerInput.Recentered)
-        {
-            Recenter();
-        }
-
         bool rolled = false;
         if (CanChangeYawPitch())
         {
-            GvrCursorHelper.HeadEmulationActive = true;
+            Cursor.lockState = CursorLockMode.Locked;
 #if ENABLE_INPUT_SYSTEM
             mouseX += UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue() * 5 / 20.0f;
 #else
@@ -127,7 +120,7 @@ public class GvrEditorEmulator : MonoBehaviour
         }
         else if (CanChangeRoll())
         {
-            GvrCursorHelper.HeadEmulationActive = true;
+            Cursor.lockState = CursorLockMode.Locked;
             rolled = true;
 #if ENABLE_INPUT_SYSTEM
             mouseZ += UnityEngine.InputSystem.Mouse.current.delta.x.ReadValue() * 0.5f;
@@ -136,9 +129,9 @@ public class GvrEditorEmulator : MonoBehaviour
 #endif
             mouseZ = Mathf.Clamp(mouseZ, -85, 85);
         }
-        else
-        {
-            GvrCursorHelper.HeadEmulationActive = false;
+		else
+		{
+            Cursor.lockState = CursorLockMode.None;
         }
 
         if (!rolled)
@@ -172,45 +165,16 @@ public class GvrEditorEmulator : MonoBehaviour
         for (int i = 0; i < Camera.allCamerasCount; ++i)
         {
             Camera cam = allCameras[i];
-
-            // Only check camera if it is an enabled VR Camera.
-            if (cam && cam.enabled && cam.stereoTargetEye != StereoTargetEyeMask.None)
-            {
-                if (cam.nearClipPlane > 0.1
-                    && GvrSettings.ViewerPlatform == GvrSettings.ViewerPlatformType.Daydream)
-                {
-                    Debug.LogWarningFormat(
-                        "Camera \"{0}\" has Near clipping plane set to {1} meters, which might " +
-                        "cause the rendering of the Daydream controller to clip unexpectedly.\n" +
-                        "Suggest using a lower value, 0.1 meters or less.",
-                        cam.name, cam.nearClipPlane);
-                }
-            }
         }
     }
 
     private void Update()
     {
-        // GvrControllerInput automatically updates GvrEditorEmulator.
-        // This guarantees that GvrEditorEmulator is updated before anything else responds to
-        // controller input, which ensures that re-centering works correctly in the editor.
-        // If GvrControllerInput is not available, then fallback to using Update().
-        if (GvrControllerInput.ApiStatus != GvrControllerApiStatus.Error)
-        {
-            return;
-        }
-
         UpdateEditorEmulation();
     }
 
     private bool CanChangeYawPitch()
     {
-        // If the MouseControllerProvider is currently active, then don't move the camera.
-        if (MouseControllerProvider.IsActivateButtonPressed)
-        {
-            return false;
-        }
-
 #if ENABLE_INPUT_SYSTEM
         return UnityEngine.InputSystem.Keyboard.current.leftAltKey.isPressed || 
                UnityEngine.InputSystem.Keyboard.current.rightAltKey.isPressed;
@@ -221,12 +185,6 @@ public class GvrEditorEmulator : MonoBehaviour
 
     private bool CanChangeRoll()
     {
-        // If the MouseControllerProvider is currently active, then don't move the camera.
-        if (MouseControllerProvider.IsActivateButtonPressed)
-        {
-            return false;
-        }
-
 #if ENABLE_INPUT_SYSTEM
         return UnityEngine.InputSystem.Keyboard.current.leftCtrlKey.isPressed ||
                UnityEngine.InputSystem.Keyboard.current.rightCtrlKey.isPressed;

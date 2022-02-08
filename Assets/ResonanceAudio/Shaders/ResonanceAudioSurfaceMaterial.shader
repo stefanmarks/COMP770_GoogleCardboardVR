@@ -58,7 +58,7 @@ Shader "ResonanceAudio/SurfaceMaterial" {
         // material of the sub-mesh.
         int subMeshIndex = 0;
         for (; subMeshIndex < _NumSubMeshes; ++subMeshIndex) {
-          if (triangleId < _SubMeshEnds[subMeshIndex]) {
+          if ((float) triangleId < _SubMeshEnds[subMeshIndex]) {
             break;
           }
         }

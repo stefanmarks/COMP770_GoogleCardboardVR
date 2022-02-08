@@ -62,13 +62,13 @@ Shader "GoogleVR/Reticle" {
         float3 vert_out = float3(i.vertex.x * scale, i.vertex.y * scale, _DistanceInMeters);
 
         fragmentInput o;
-        o.position = UnityObjectToClipPos (vert_out);
-        o.uv = i.vertex.xy;
+        o.position = UnityObjectToClipPos(vert_out);
+        o.uv       = i.vertex.xy;
         return o;
       }
 
-      fixed4 frag(fragmentInput i) : SV_Target {
-        float f = step((atan2(-i.uv.x, -i.uv.y) / (2*3.14159)) + 0.5, _FuseTime );
+      fixed4 frag(fragmentInput i) : SV_Target{
+        float f = step((atan2(-i.uv.x, -i.uv.y) / (2*3.14159274)) + 0.50001, _FuseTime);
         return lerp(_Color, _ColorFuse, f);
       }
 
