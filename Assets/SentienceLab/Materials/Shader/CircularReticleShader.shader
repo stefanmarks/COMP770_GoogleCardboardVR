@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-Shader "GoogleVR/Reticle" {
+Shader "UI/Circular Reticle" {
     Properties{
         _Color("Color", Color) = (1, 1, 1, 1)
         _ColorFuse("Fuse Color", Color) = (1, 0, 0, 1)

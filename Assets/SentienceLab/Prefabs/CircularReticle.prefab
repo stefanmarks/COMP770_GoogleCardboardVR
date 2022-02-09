@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2840708715099559108}
   - component: {fileID: 2840708715099559107}
   m_Layer: 2
-  m_Name: GvrReticlePointer
+  m_Name: CircularReticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
