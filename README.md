@@ -1,6 +1,6 @@
 # COMP770 Google Cardboard VR
 
-COMP770 Repository for Google Cardboard VR
+Starter repository for COMP770 Google Cardboard VR development
 
 This is a pre-packaged Unity project with:
 
