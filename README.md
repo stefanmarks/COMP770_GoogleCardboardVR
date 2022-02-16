@@ -1,4 +1,4 @@
-# COMP770_GoogleCardboard
+# COMP770 Google Cardboard VR
 
 COMP770 Repository for Google Cardboard VR
 
