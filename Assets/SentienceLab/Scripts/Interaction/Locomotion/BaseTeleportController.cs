@@ -62,7 +62,7 @@ namespace SentienceLab
 				return;
 			}
 
-			if (TeleportAction == null)
+			if (TeleportAction != null)
 			{
 				TeleportAction.action.performed += delegate { OnActionStart(); };
 				TeleportAction.action.canceled  += delegate { OnActionEnd(); };
