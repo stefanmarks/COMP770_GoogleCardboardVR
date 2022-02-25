@@ -6,8 +6,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using SentienceLab.PostProcessing;
 using UnityEngine.Events;
+using SentienceLab.PostProcessing;
 
 namespace SentienceLab
 {
