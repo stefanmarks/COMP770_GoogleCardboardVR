@@ -254,6 +254,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1643314799}
+  - component: {fileID: 1643314803}
+  - component: {fileID: 1643314802}
   - component: {fileID: 1643314800}
   - component: {fileID: 1643314801}
   m_Layer: 0
@@ -292,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScenesToLoad:
-  - MultiScene_Main
+  - MainScene
   LoadOnStart: 1
   FadeTime: 0
   FadeColour: {r: 0, g: 0, b: 0, a: 1}
@@ -309,3 +311,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectsToPreserve: []
+--- !u!114 &1643314802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643314798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb9faac369bc4fe4ea8b979d6934e811, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sleepTimeout: -1
+  screenBrightness: 1
+--- !u!114 &1643314803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643314798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd68f027e715c44aa8d097000d4cccfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
