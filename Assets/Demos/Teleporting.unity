@@ -289,6 +289,13 @@ MonoBehaviour:
   positionReference: {fileID: 959308593}
   transitionType: 0
   transitionTime: 0.1
+  events:
+    OnTeleportStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnTeleportEnd:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &136657194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,7 +1121,6 @@ GameObject:
   - component: {fileID: 959308592}
   - component: {fileID: 959308591}
   - component: {fileID: 959308589}
-  - component: {fileID: 959308588}
   - component: {fileID: 959308590}
   - component: {fileID: 959308596}
   - component: {fileID: 959308595}
@@ -1126,26 +1132,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &959308588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 959308587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 113e4aa2cd3db44d1ac0cb7e9794964b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalGainDb: 0
-  occlusionMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  stereoSpeakerModeEnabled: 0
-  recorderSeamless: 0
-  recorderSourceTag: Untagged
-  recorderFoldout: 0
 --- !u!81 &959308589
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1273,6 +1259,7 @@ MonoBehaviour:
   ValidTargetIndicator: {fileID: 444354, guid: 2f7e2204689b3ab439070b392f6a721d, type: 3}
   InvalidTargetIndicator: {fileID: 444354, guid: 366766bdfc5553e4493c26ed7321fa7f,
     type: 3}
+  SmoothingTime: 0.1
 --- !u!114 &959308596
 MonoBehaviour:
   m_ObjectHideFlags: 0
