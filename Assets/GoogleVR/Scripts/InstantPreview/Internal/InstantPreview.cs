@@ -539,14 +539,14 @@ namespace Gvr.Internal
 
 						// Gets version of Unity's local .apk version (to install, if needed).
 						RunCommand(InstantPreviewHelper.aaptPath,
-								string.Format("dump badging {0}", apkPath),
+								string.Format("dump badging \"{0}\"", apkPath),
 								out output, out errors);
 						if (!string.IsNullOrEmpty(output) && string.IsNullOrEmpty(errors))
 						{
 							string unityAPKVersionInfoDump = output;
 
 							// Finds (versionName='), captures any alphaNumerics separated by periods, and selects them until (').
-							System.Text.RegularExpressions.Match unityAPKVersionNameRegex = Regex.Match(
+							Match unityAPKVersionNameRegex = Regex.Match(
 								unityAPKVersionInfoDump, "versionName=\'([^']*)\'");
 							if (unityAPKVersionNameRegex.Groups.Count > 1)
 							{
