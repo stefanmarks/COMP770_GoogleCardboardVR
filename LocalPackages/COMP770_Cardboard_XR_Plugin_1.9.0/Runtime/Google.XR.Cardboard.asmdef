@@ -1,0 +1,15 @@
+{
+    "name": "Google.XR.Cardboard",
+    "references": [
+        "Unity.XR.Management",
+        "Unity.InputSystem"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

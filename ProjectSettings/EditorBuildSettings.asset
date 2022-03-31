@@ -6,17 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Demos/MultiScene/0_Start.unity
-    guid: 7134c75726c6ee54fa64535fd9b5fcd0
-  - enabled: 1
-    path: Assets/Demos/MultiScene/MainScene.unity
-    guid: 8ecdb3fe8cfe4204fa3f90131ad251f7
-  - enabled: 1
-    path: Assets/Demos/MultiScene/Scene1.unity
-    guid: b1de81205cf09c842b1344e2e32b49e6
-  - enabled: 1
-    path: Assets/Demos/MultiScene/Scene2.unity
-    guid: 5f76970051bb42847a53a860e6c6317a
+    path: Assets/Demos/Teleporting.unity
+    guid: f85daf2a9f8285a4cb288100c107255b
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 47897d3a43b1dca488bf0ae0239f46f2,
       type: 2}
