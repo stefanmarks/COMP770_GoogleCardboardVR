@@ -505,6 +505,13 @@ MonoBehaviour:
   positionReference: {fileID: 959308593}
   transitionType: 0
   transitionTime: 0.1
+  events:
+    OnTeleportStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnTeleportEnd:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &133136952
 GameObject:
   m_ObjectHideFlags: 0
@@ -3403,6 +3410,7 @@ MonoBehaviour:
   ValidTargetIndicator: {fileID: 444354, guid: 2f7e2204689b3ab439070b392f6a721d, type: 3}
   InvalidTargetIndicator: {fileID: 444354, guid: 366766bdfc5553e4493c26ed7321fa7f,
     type: 3}
+  SmoothingTime: 0.1
 --- !u!114 &959308596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5804,9 +5812,9 @@ AudioSource:
   MaxDistance: 20
   Pan2D: 0
   rolloffMode: 0
-  BypassEffects: 0
+  BypassEffects: 1
   BypassListenerEffects: 0
-  BypassReverbZones: 0
+  BypassReverbZones: 1
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
