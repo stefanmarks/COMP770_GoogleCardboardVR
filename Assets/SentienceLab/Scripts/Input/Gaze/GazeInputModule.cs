@@ -285,14 +285,21 @@ public class GazeInputModule : BaseInputModule
 		{
 			eventCamera = pointerData.enterEventCamera;
 		}
-		
+
 		GameObject gazeObject           = GetCurrentGameObject(); // Get the gaze target
 		Vector3    intersectionPosition = GetIntersectionPosition();
-		bool       isInteractive        = (pointerData.pointerPress != null) ||
-		                                  ExecuteEvents.GetEventHandler<IPointerClickHandler>(gazeObject) != null;
+
+		// get special components
+		InteractiveRigidbody irb = (gazeObject != null) ? gazeObject.GetComponentInParent<InteractiveRigidbody>() : null;
+		TeleportTarget       tt  = (gazeObject != null) ? gazeObject.GetComponentInParent<TeleportTarget>() : null;
+
+		// is the current object interactive?
+		bool isInteractive = 
+			(pointerData.pointerPress != null) ||
+			(ExecuteEvents.GetEventHandler<IPointerClickHandler>(gazeObject) != null) ||
+			(irb != null);
 
 		// consider teleport targets out of range 
-		TeleportTarget tt = (gazeObject != null) ? gazeObject.GetComponentInParent<TeleportTarget>() : null;
 		if ((tt != null) && (tt.AimingController == null))
 		{
 			// teleport target, but not considered by the teleport controller
@@ -347,9 +354,14 @@ public class GazeInputModule : BaseInputModule
 			{
 				gazePointer.OnGazeStart(eventCamera, gazeObject, intersectionPosition, isInteractive);
 				gazeStartTime = Time.unscaledTime;
+				fuseState     = FuseState.Arming;
+
+				// consider gaze modifier	
 				GazeBehaviourModifier gbm = gazeObject.GetComponentInParent<GazeBehaviourModifier>();
 				fuseTime  = (gbm != null) && (gbm.fuseTimeOverride > 0) ? gbm.fuseTimeOverride : defaultFuseTime;
-				fuseState = FuseState.Arming;
+				
+				// interactive rigidbodies don't auto-trigger
+				if (irb != null) { fuseTime = float.PositiveInfinity; }
 			}
 		}
 	}
