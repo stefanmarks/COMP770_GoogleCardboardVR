@@ -48,9 +48,9 @@ public class GvrEditorEmulator : MonoBehaviour
     // Use mouse to emulate head in the editor.
     // These variables must be static so that head pose is maintained between scene changes,
     // as it is on device.
-    private float mouseX = 0;
-    private float mouseY = 0;
-    private float mouseZ = 0;
+    private static float mouseX = 0;
+    private static float mouseY = 0;
+    private static float mouseZ = 0;
 
     /// <summary>Gets the instance for this singleton class.</summary>
     /// <value>The instance for this singleton class.</value>
@@ -152,8 +152,8 @@ public class GvrEditorEmulator : MonoBehaviour
         }
         else if (Instance != this)
         {
-            Debug.LogError("More than one active GvrEditorEmulator instance was found in your " +
-                           "scene.  Ensure that there is only one active GvrEditorEmulator.");
+            Debug.LogError("More than one active GvrEditorEmulator instance was found in your scene.\n" +
+                           "Ensure that there is only one active GvrEditorEmulator.");
             this.enabled = false;
             return;
         }
@@ -162,10 +162,6 @@ public class GvrEditorEmulator : MonoBehaviour
     private void Start()
     {
         UpdateAllCameras();
-        for (int i = 0; i < Camera.allCamerasCount; ++i)
-        {
-            Camera cam = allCameras[i];
-        }
     }
 
     private void Update()
@@ -211,7 +207,7 @@ public class GvrEditorEmulator : MonoBehaviour
             // Check if the Camera is a valid VR Camera, and if so update it to track head motion.
             if (cam && cam.enabled && cam.stereoTargetEye != StereoTargetEyeMask.None)
             {
-                cam.transform.localPosition = HeadPosition * cam.transform.lossyScale.y;
+                cam.transform.localPosition = HeadPosition;
                 cam.transform.localRotation = HeadRotation;
             }
         }
