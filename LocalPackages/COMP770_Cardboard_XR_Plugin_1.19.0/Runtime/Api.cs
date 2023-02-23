@@ -19,8 +19,6 @@
 namespace Google.XR.Cardboard
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using UnityEngine;
 	using UnityEngine.InputSystem;
@@ -35,21 +33,6 @@ namespace Google.XR.Cardboard
         private static ScreenOrientation _cachedScreenOrientation;
 		private static bool _initWarningIssued = false;
 
-
-        /// <summary>
-        /// Whether a trigger touch started.
-        /// </summary>
-        private static bool _touchStarted = false;
-
-        /// <summary>
-        /// Tracks when the trigger touch sequence begins.
-        /// </summary>
-        private static double _startTouchStamp = 0.0;
-
-        /// <summary>
-        /// See MinTriggerHeldPressedTime property.
-        /// </summary>
-        private static double _minTriggerHeldPressedTime = 3.0;
 
         /// <summary>
 		/// Gets the touch state.
