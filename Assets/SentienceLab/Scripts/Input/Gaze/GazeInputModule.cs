@@ -73,10 +73,9 @@ public class GazeInputModule : BaseInputModule
 	public float clickTime = 0.1f;  // Based on default time for a button to animate to Pressed.
 
 	/// The pixel through which to cast rays, in viewport coordinates.  Generally, the center
-	/// pixel is best, assuming a monoscopic camera is selected as the `Canvas`' event camera.
+	/// pixel is best, assuming a monoscopic camera is selected as the 'Canvas' event camera.
 	[HideInInspector]
 	public Vector2 hotspot = new Vector2(0.5f, 0.5f);
-
 
 
 	public override bool ShouldActivateModule()
@@ -97,6 +96,13 @@ public class GazeInputModule : BaseInputModule
 		{
 			isActive = activeState;
 
+			if (isActive)
+			{
+				// just activated > initialise stuff
+				pointerData  = new PointerEventData(eventSystem);
+				lastHeadPose = Vector2.zero;
+			}
+
 			// Activate gaze pointer
 			if (gazePointer != null)
 			{
@@ -106,15 +112,13 @@ public class GazeInputModule : BaseInputModule
 				}
 			}
 
-			if (TriggerAction != null)
+			if ((TriggerAction != null) && (TriggerAction.action != null))
 			{
 				TriggerAction.action.performed += OnTriggerPressed;
 				TriggerAction.action.canceled  += OnTriggerReleased;
 				TriggerAction.action.Enable();
 			}
 		}
-
-		eventCamera = null;
 		
 		return activeState;
 	}
@@ -130,7 +134,7 @@ public class GazeInputModule : BaseInputModule
 			HandlePointerExitAndEnter(pointerData, null);
 			pointerData = null;
 		}
-		if (TriggerAction != null)
+		if ((TriggerAction != null) && (TriggerAction.action != null))
 		{
 			TriggerAction.action.performed -= OnTriggerPressed;
 			TriggerAction.action.canceled  -= OnTriggerReleased;
@@ -159,7 +163,7 @@ public class GazeInputModule : BaseInputModule
 
 	public override bool IsPointerOverGameObject(int pointerId)
 	{
-		return pointerData != null && pointerData.pointerEnter != null;
+		return (pointerData != null) && (pointerData.pointerEnter != null);
 	}
 
 
@@ -202,13 +206,9 @@ public class GazeInputModule : BaseInputModule
 
 	private void CastRayFromGaze()
 	{
-		Vector2 headPose = (eventCamera == null) ? Vector2.zero : NormalizedCartesianToSpherical(eventCamera.transform.forward);
-
-		if (pointerData == null)
-		{
-			pointerData  = new PointerEventData(eventSystem);
-			lastHeadPose = headPose;
-		}
+		Vector2 headPose = (pointerData.enterEventCamera == null) ? 
+			Vector2.zero : 
+			NormalizedCartesianToSpherical(pointerData.enterEventCamera.transform.forward);
 
 		// Cast a ray into the scene
 		pointerData.Reset();
@@ -280,12 +280,6 @@ public class GazeInputModule : BaseInputModule
 	{
 		if (gazePointer == null) return;
 
-		// Get the camera
-		if (pointerData.enterEventCamera != null)
-		{
-			eventCamera = pointerData.enterEventCamera;
-		}
-
 		GameObject gazeObject           = GetCurrentGameObject(); // Get the gaze target
 		Vector3    intersectionPosition = GetIntersectionPosition();
 
@@ -339,29 +333,32 @@ public class GazeInputModule : BaseInputModule
 					}
 				}
 
-				gazePointer.OnGazeStay(eventCamera, gazeObject, intersectionPosition, progress, isInteractive);
+				gazePointer.OnGazeStay(pointerData.enterEventCamera, gazeObject, intersectionPosition, progress, isInteractive);
 			}
 		}
 		else
 		{
 			if (previousGazedObject != null)
 			{
-				gazePointer.OnGazeExit(eventCamera, previousGazedObject);
+				gazePointer.OnGazeExit(pointerData.enterEventCamera, previousGazedObject);
 				gazeStartTime = 0;
 				fuseState     = FuseState.Idle;
 			}
 			if (gazeObject != null)
 			{
-				gazePointer.OnGazeStart(eventCamera, gazeObject, intersectionPosition, isInteractive);
+				gazePointer.OnGazeStart(pointerData.enterEventCamera, gazeObject, intersectionPosition, isInteractive);
 				gazeStartTime = Time.unscaledTime;
 				fuseState     = FuseState.Arming;
 
 				// consider gaze modifier	
 				GazeBehaviourModifier gbm = gazeObject.GetComponentInParent<GazeBehaviourModifier>();
-				fuseTime  = (gbm != null) && (gbm.fuseTimeOverride > 0) ? gbm.fuseTimeOverride : defaultFuseTime;
+				fuseTime = (gbm != null) && (gbm.fuseTimeOverride > 0) ? gbm.fuseTimeOverride : defaultFuseTime;
 				
-				// interactive rigidbodies don't auto-trigger
-				if (irb != null) { fuseTime = float.PositiveInfinity; }
+				// don't auto-trigger interactive rigidbodies
+				if (irb != null) { fuseTime = 0; }
+
+				// fuseTime 0 actually means never
+				if (fuseTime <= 0.0000001f) { fuseTime = float.PositiveInfinity; }
 			}
 		}
 	}
@@ -405,8 +402,7 @@ public class GazeInputModule : BaseInputModule
 
 		if (gazePointer != null)
 		{
-			Camera camera = pointerData.enterEventCamera;
-			gazePointer.OnGazeTriggerEnd(camera);
+			gazePointer.OnGazeTriggerEnd(pointerData.enterEventCamera);
 		}
 
 		GameObject go = pointerData.pointerCurrentRaycast.gameObject;
@@ -527,11 +523,7 @@ public class GazeInputModule : BaseInputModule
 		GameObject currentGameObject = GetCurrentGameObject();
 		if (currentGameObject)
 		{
-			if (pointerData.enterEventCamera != null)
-			{
-				eventCamera = pointerData.enterEventCamera;
-			}
-			gazePointer.OnGazeExit(eventCamera, currentGameObject);
+			gazePointer.OnGazeExit(pointerData.enterEventCamera, currentGameObject);
 		}
 
 		gazePointer.OnGazeDisabled();
@@ -555,7 +547,6 @@ public class GazeInputModule : BaseInputModule
 	private float            gazeStartTime, fuseTime;
 	private FuseState        fuseState;
 	private TriggerState     triggerState;
-	private Camera           eventCamera;
 	private bool             isActive = false;
 	private IGazePointer     gazePointer;
 }
