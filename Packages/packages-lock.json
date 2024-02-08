@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.google.xr.cardboard": {
-      "version": "file:../LocalPackages/COMP770_Cardboard_XR_Plugin_1.19.0",
+      "version": "file:../LocalPackages/COMP770_Cardboard_XR_Plugin_1.23.0",
       "depth": 0,
       "source": "local",
       "dependencies": {
