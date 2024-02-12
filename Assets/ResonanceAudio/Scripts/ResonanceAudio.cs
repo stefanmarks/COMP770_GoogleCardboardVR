@@ -34,7 +34,7 @@ public static class ResonanceAudio {
   public static Transform ListenerTransform {
     get {
       if (listenerTransform == null) {
-        var listener = GameObject.FindObjectOfType<AudioListener>();
+        var listener = UnityEngine.Object.FindAnyObjectByType<AudioListener>();
         if (listener != null) {
           listenerTransform = listener.transform;
         }

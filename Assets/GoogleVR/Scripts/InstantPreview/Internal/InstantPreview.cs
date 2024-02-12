@@ -950,7 +950,7 @@ namespace Gvr.Internal
 
 		private static void SetEditorEmulatorsEnabled(bool enabled)
 		{
-			foreach (var editorEmulator in FindObjectsOfType<GvrEditorEmulator>())
+			foreach (var editorEmulator in FindObjectsByType<GvrEditorEmulator>(FindObjectsSortMode.None))
 			{
 				editorEmulator.enabled = enabled;
 			}

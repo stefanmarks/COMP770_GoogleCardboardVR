@@ -151,7 +151,7 @@ public class ResonanceAudioListener : MonoBehaviour {
   // Updates the list of the target spatial audio sources to be recorded.
   private void UpdateTaggedSources() {
     recorderTaggedSources.Clear();
-    var sources = GameObject.FindObjectsOfType<AudioSource>();
+    var sources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
     for (int i = 0; i < sources.Length; ++i) {
       // Untagged is treated as *all* spatial audio sources in the scene.
       if ((recorderSourceTag == "Untagged" || sources[i].tag == recorderSourceTag) &&

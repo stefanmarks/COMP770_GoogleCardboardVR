@@ -395,7 +395,7 @@ public class ResonanceAudioReverbBakingWindow : EditorWindow {
   // The UI for selecting a subset of reverb probes to bake reverb to.
   private void DrawProbeSelection() {
     ResonanceAudioReverbProbe[] allReverbProbes =
-        UnityEngine.Object.FindObjectsOfType<ResonanceAudioReverbProbe>();
+        FindObjectsByType<ResonanceAudioReverbProbe>(FindObjectsSortMode.None);
 
     // Clean up the deleted reverb probes.
     var selectedReverbProbes = ResonanceAudioReverbComputer.selectedReverbProbes;

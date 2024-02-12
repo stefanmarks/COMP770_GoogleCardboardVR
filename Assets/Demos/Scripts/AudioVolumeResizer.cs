@@ -27,7 +27,7 @@ public class AudioVolumeResizer : MonoBehaviour
 	{
 		if (Recorder == null)
 		{
-			Recorder = FindObjectOfType<SentienceLab.AudioDetector>();
+			Recorder = FindAnyObjectByType<SentienceLab.AudioDetector>();
 		}
 		if (Recorder == null)
 		{

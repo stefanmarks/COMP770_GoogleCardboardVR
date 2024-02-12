@@ -60,7 +60,7 @@ public class GvrEditorEmulator : MonoBehaviour
         {
             if (instance == null && !instanceSearchedFor)
             {
-                instance = FindObjectOfType<GvrEditorEmulator>();
+                instance = FindAnyObjectByType<GvrEditorEmulator>();
                 instanceSearchedFor = true;
             }
 
