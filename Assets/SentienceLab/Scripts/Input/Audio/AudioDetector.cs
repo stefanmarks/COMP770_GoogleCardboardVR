@@ -35,7 +35,7 @@ namespace SentienceLab
 		public void Start()
 		{
 			SelectMicrophone();
-		
+
 			// Start recording audio in lowest quality in 1s clips, looping
 			Microphone.GetDeviceCaps(MicrophoneName, out int minFreq, out int maxFreq);
 			m_clip = Microphone.Start(MicrophoneName, true, 1, minFreq);
@@ -85,7 +85,7 @@ namespace SentienceLab
 			}
 		}
 
-	
+
 		private void ListMicrophones()
 		{
 			string[]      microphones = Microphone.devices;
