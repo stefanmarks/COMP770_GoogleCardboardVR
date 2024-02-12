@@ -14,13 +14,10 @@ namespace SentienceLab
 	[AddComponentMenu("SentienceLab/Interaction/Gaze/Gaze Behaviour Modifier")]
 	public class GazeBehaviourModifier : MonoBehaviour
 	{
-		[Tooltip("0: Use default fuse time\n>0: Override fuse time\nInfinity: No fuse")]
 		public float fuseTimeOverride         = 0;
 
-		[Tooltip("0: Use default minimum gaze range\n>0: Override minimum gaze range")]
 		public float minimumGazeRangeOverride = 0;
 
-		[Tooltip("0: Use default maximum gaze range\n>0: Override maximum gaze range")]
 		public float maximumGazeRangeOverride = 0;
 	}
 }

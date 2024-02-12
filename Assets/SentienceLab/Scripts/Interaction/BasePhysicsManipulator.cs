@@ -47,17 +47,39 @@ namespace SentienceLab
 
 		public virtual void Start()
 		{
+			if (GrabAction == null)
+			{
+				Debug.LogWarning("No action defined for grab");
+				this.enabled = false;
+			}
+
+			m_candidateBody = null;
+			m_touchedBody   = null;
+			m_activeBody    = null;
+		}
+
+
+		public void OnEnable()
+		{
 			if (GrabAction != null)
 			{
 				GrabAction.action.performed += OnGrabStart;
 				GrabAction.action.canceled  += OnGrabEnd;
 				GrabAction.action.Enable();
 			}
-			else
+		}
+
+
+		public void OnDisable()
+		{
+			if (GrabAction != null)
 			{
-				Debug.LogWarning("No action defined for grab");
-				this.enabled = false;
+				GrabAction.action.performed -= OnGrabStart;
+				GrabAction.action.canceled  -= OnGrabEnd;
 			}
+			// just in case we were manipulating or touching an object...
+			EndGrab();
+			SetCandidate(null, Vector3.zero);
 		}
 
 
@@ -67,34 +89,44 @@ namespace SentienceLab
 		/// <param name="_candidate">potential rigidbody candidate or <c>null</c> if there is no candidate</param>
 		/// <param name="_grabPoint">world coordinate of grab point</param>
 		/// 
-		protected void SetCandidate(Rigidbody _candidate, Vector3 _grabPoint)
+		protected void SetCandidate(Rigidbody _candidate, Vector3 _touchPoint)
 		{
-			// don't change candidate while holding onto an object
+			if (!isActiveAndEnabled) return;
+
+			m_candidateBody  = _candidate;
+			m_candidateTouch = _touchPoint;
+
+			// don't change candidate while manipulating an object
 			if (!IsManipulatingRigidbody())
 			{
-				if (m_candidateBody != _candidate)
-				{
-					// did we touch another object before?
-					if (m_candidateBody != null)
-					{
-						// fire touch end events
-						var irb = m_candidateBody.GetComponent<InteractiveRigidbody>();
-						if (irb    != null) irb.InvokeTouchEnd(this.gameObject);
-						if (events != null) events.OnTouchEnd.Invoke(m_candidateBody);
-					}
+				CheckCandidate();
+			}
+		}
 
-					m_candidateBody      = _candidate;
-					m_candidateGrabPoint = _grabPoint;
+		protected void CheckCandidate()
+		{
+			// no change > get out
+			if (m_touchedBody == m_candidateBody) return;
+			
+			// did we touch another object before?
+			if (m_touchedBody != null)
+			{
+				// fire "touch end" events
+				var irb = m_touchedBody.GetComponent<InteractiveRigidbody>();
+				if (irb    != null) irb.InvokeTouchEnd(this.gameObject);
+				if (events != null) events.OnTouchEnd.Invoke(m_touchedBody);
+			}
 
-					// are we touching an object now?
-					if (m_candidateBody != null)
-					{
-						// fire touch start events
-						var irb = m_candidateBody.GetComponent<InteractiveRigidbody>();
-						if (irb    != null) irb.InvokeTouchStart(this.gameObject);
-						if (events != null) events.OnTouchStart.Invoke(m_candidateBody);
-					}
-				}
+			m_touchedBody = m_candidateBody;
+			m_touchPoint  = m_candidateTouch;
+
+			// are we touching an object now?
+			if (m_touchedBody != null)
+			{
+				// fire "touch start" events
+				var irb = m_touchedBody.GetComponent<InteractiveRigidbody>();
+				if (irb    != null) irb.InvokeTouchStart(this.gameObject);
+				if (events != null) events.OnTouchStart.Invoke(m_touchedBody);
 			}
 		}
 
@@ -123,11 +155,29 @@ namespace SentienceLab
 		}
 
 
-		protected void OnGrabStart(InputAction.CallbackContext obj)
+		protected void OnGrabStart(InputAction.CallbackContext _)
 		{
-			if ((m_candidateBody != null) || (m_defaultBody != null))
+			StartGrab();
+		}
+
+
+		public void StartGrab()
+		{
+			if ((m_touchedBody != null) || (m_defaultBody != null))
 			{
-				m_activeBody = (m_candidateBody != null) ? m_candidateBody : m_defaultBody;
+				if (m_touchedBody != null)
+				{
+					// we have touched an object > make active body
+					m_activeBody = m_touchedBody;
+				}
+				else
+				{
+					// no candidate > fallback to default body:
+					// need to also use current transform position as grab point
+					m_activeBody = m_defaultBody;
+					m_touchPoint = this.transform.position;
+				}
+
 				RigidbodyConstraints c = m_activeBody.constraints;
 				if (c == RigidbodyConstraints.None)
 				{
@@ -138,9 +188,9 @@ namespace SentienceLab
 				}
 				else
 				{
-					// body is restrained - apply forces on contact point
-					m_relBodyPoint = m_activeBody.transform.InverseTransformPoint(m_candidateGrabPoint);
-					m_relTargetPoint = transform.InverseTransformPoint(m_candidateGrabPoint);
+					// body is constrained - apply forces on contact point
+					m_relBodyPoint = m_activeBody.transform.InverseTransformPoint(m_touchPoint);
+					m_relTargetPoint = transform.InverseTransformPoint(m_touchPoint);
 					m_relTargetOrientation = Quaternion.Inverse(transform.rotation) * m_activeBody.transform.rotation;
 				}
 
@@ -163,7 +213,13 @@ namespace SentienceLab
 		}
 
 
-		protected void OnGrabEnd(InputAction.CallbackContext obj)
+		protected void OnGrabEnd(InputAction.CallbackContext _)
+		{
+			EndGrab();
+		}
+
+
+		public void EndGrab()
 		{
 			if (m_activeBody != null)
 			{
@@ -179,6 +235,9 @@ namespace SentienceLab
 				if (events != null) events.OnGrabEnd.Invoke(m_activeBody);
 
 				m_activeBody = null;
+
+				// in the meantime, another body might have become candidate
+				CheckCandidate();
 			}
 		}
 
@@ -198,9 +257,9 @@ namespace SentienceLab
 		}
 
 
-		protected Rigidbody  m_candidateBody, m_activeBody, m_defaultBody;
+		protected Rigidbody  m_candidateBody, m_touchedBody, m_activeBody, m_defaultBody;
 		protected bool       m_previousGravityFlag;
-		protected Vector3    m_candidateGrabPoint, m_relTargetPoint, m_relBodyPoint;
+		protected Vector3    m_candidateTouch, m_touchPoint, m_relTargetPoint, m_relBodyPoint;
 		protected Quaternion m_relTargetOrientation;
 	}
 }

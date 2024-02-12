@@ -6,15 +6,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SentienceLab.PostProcessing
+namespace SentienceLab
 {
 	/// <summary>
 	/// Class for fading the screen using postprocessing.
 	/// </summary>
-
-	[DisallowMultipleComponent]
+	///
 	[RequireComponent(typeof(Camera))]
-	[AddComponentMenu("Effects/Screen Fade")]
+	[AddComponentMenu("SentienceLab/Effects/Screen Fade")]
 
 	public class ScreenFade : MonoBehaviour
 	{
@@ -40,21 +39,24 @@ namespace SentienceLab.PostProcessing
 		}
 
 
-		private void OnRenderImage(RenderTexture source, RenderTexture destination)
-		{
-			if (m_FadeMaterial != null)
+		public virtual void OnPostRender()
+		{ 
+			if (FadeFactor > 0 && m_FadeMaterial != null)
 			{
-				m_FadeMaterial.SetColor("_Colour", FadeColour);
-				m_FadeMaterial.SetFloat("_Fade", FadeFactor);
-				Graphics.Blit(source, destination, m_FadeMaterial);
-			}
-			else
-			{
-				// fallback: show at least the original image
-				Graphics.Blit(source, destination);
+				m_FadeMaterial.color = new Color(FadeColour.r, FadeColour.g, FadeColour.b, FadeColour.a * FadeFactor);
+				m_FadeMaterial.SetPass(0);
+				GL.PushMatrix();
+					GL.LoadOrtho();
+					GL.Color(m_FadeMaterial.color);
+					GL.Begin(GL.QUADS);
+						GL.Vertex3(0f, 0f, 1f);
+						GL.Vertex3(0f, 1f, 1f);
+						GL.Vertex3(1f, 1f, 1f);
+						GL.Vertex3(1f, 0f, 1f);
+					GL.End();
+				GL.PopMatrix();
 			}
 		}
-
 
 		/// <summary>
 		/// Attached the fade effect to all cameras and returns a list to the scripts.
