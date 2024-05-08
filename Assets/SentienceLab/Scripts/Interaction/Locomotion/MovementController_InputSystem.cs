@@ -50,8 +50,8 @@ namespace SentienceLab
 
 		public void Start()
 		{
-			m_vecTranslate = Vector3.zero;
-			m_vecRotate = Vector3.zero;
+			m_vecTranslate  = Vector3.zero;
+			m_vecRotate     = Vector3.zero;
 			m_inputCooldown = 10;  // don't immediately process input (e.g., initial mouse delta causing large jump)
 
 			if (RotationBasisNode == null)
