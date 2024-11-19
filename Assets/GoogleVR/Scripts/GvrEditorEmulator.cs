@@ -88,11 +88,6 @@ public class GvrEditorEmulator : MonoBehaviour
     /// <remarks>Should be called in one MonoBehavior's `Update` method.</remarks>
     public void UpdateEditorEmulation()
     {
-        if (InstantPreview.IsActive)
-        {
-            return;
-        }
-
         bool rolled = false;
         if (CanChangeYawPitch())
         {
