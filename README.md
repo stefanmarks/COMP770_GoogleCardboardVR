@@ -8,7 +8,7 @@ This is a pre-packaged Unity project with:
 - Resonance Audio SDK
 - SentienceLab script selection
 
-Version: 2024, Semester 1
+Version: 2025, Semester 1
 
 ## Minimum Android SDK Problem
 
