@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.google.xr.cardboard": "file:../LocalPackages/COMP770_Cardboard_XR_Plugin_1.32.0",
-    "com.unity.inputsystem": "1.17.0",
+    "com.unity.inputsystem": "1.18.0",
     "com.unity.ugui": "2.0.0",
     "com.unity.xr.management": "4.5.4",
     "com.unity.modules.accessibility": "1.0.0",
