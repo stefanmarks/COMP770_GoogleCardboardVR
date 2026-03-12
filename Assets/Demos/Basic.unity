@@ -773,7 +773,7 @@ MonoBehaviour:
   defaultFuseTime: 1
   gazePointerObject: {fileID: 501663281}
   TriggerAction:
-    m_UseReference: 0
+    m_UseReference: 1
     m_Action:
       m_Name: Trigger
       m_Type: 0
@@ -807,7 +807,8 @@ MonoBehaviour:
         m_Action: Trigger
         m_Flags: 0
       m_Flags: 0
-    m_Reference: {fileID: 0}
+    m_Reference: {fileID: -7333974546826837950, guid: 772490834af932441ae6f969d7787f0c,
+      type: 3}
   DrawDebugGazeRay: 0
   clickTime: 0.1
   hotspot: {x: 0.5, y: 0.5}
