@@ -106,7 +106,7 @@ public class GazeInputModule : BaseInputModule
 				}
 			}
 
-			if (TriggerAction != null)
+			if ((TriggerAction != null) && (TriggerAction.action != null))
 			{
 				TriggerAction.action.performed += OnTriggerPressed;
 				TriggerAction.action.canceled  += OnTriggerReleased;
@@ -124,13 +124,15 @@ public class GazeInputModule : BaseInputModule
 	{
 		DisableGazePointer();
 		base.DeactivateModule();
+
 		if (pointerData != null)
 		{
 			HandlePendingClick();
 			HandlePointerExitAndEnter(pointerData, null);
 			pointerData = null;
 		}
-		if (TriggerAction != null)
+
+		if ((TriggerAction != null) && (TriggerAction.action != null))
 		{
 			TriggerAction.action.performed -= OnTriggerPressed;
 			TriggerAction.action.canceled  -= OnTriggerReleased;
