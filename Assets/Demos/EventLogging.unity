@@ -311,7 +311,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 168835912}
           m_TargetAssemblyTypeName: SentienceLab.DataLogger, Assembly-CSharp
-          m_MethodName: LogTransform
+          m_MethodName: LogTransformPosition
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1529,7 +1529,7 @@ GameObject:
   - component: {fileID: 1882589707}
   m_Layer: 0
   m_Name: HeadTrigger
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1580,7 +1580,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1632,14 +1632,39 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  TagNames: []
+  TagNames:
+  - Player
   events:
     OnTriggerEnter:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 168835912}
+          m_TargetAssemblyTypeName: SentienceLab.DataLogger, Assembly-CSharp
+          m_MethodName: Log
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: entered goal zone
+            m_BoolArgument: 0
+          m_CallState: 2
     OnTriggerExit:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 168835912}
+          m_TargetAssemblyTypeName: SentienceLab.DataLogger, Assembly-CSharp
+          m_MethodName: Log
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: exited goal zone
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!65 &2119457019
 BoxCollider:
   m_ObjectHideFlags: 0
